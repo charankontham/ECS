@@ -1,0 +1,20 @@
+package com.charan.ecs.service.interfaces;
+
+import com.charan.ecs.dto.ProductCategoryDto;
+
+import java.util.List;
+
+public interface ProductCategoryServiceInterface {
+
+    ProductCategoryDto getProductCategoryById(int categoryId);
+
+    List<ProductCategoryDto> getAllProductCategories();
+
+    ProductCategoryDto addProductCategory(ProductCategoryDto productCategoryDto);
+
+    ProductCategoryDto updateProductCategory(ProductCategoryDto productCategoryDto);
+
+    boolean deleteProductCategory(int categoryId);
+
+    boolean productCategoryExists(int categoryId);
+}

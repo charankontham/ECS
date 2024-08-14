@@ -1,0 +1,43 @@
+Customer
+    Get - getById, getAll, getByEmail, login
+    Post - add customer
+    Put - update customer
+    Delete - delete customer
+Product
+    Get - getById, getAll
+    Post - add product
+    Put - update product
+    Delete - delete product
+Cart
+    Get - getById, getAll
+    Post - add cart
+    Put - update cart
+    Delete - cart
+Order
+    Get - getById, getAllByCustomerId, getAll
+    Post - add order
+    Put - update order
+Address
+    Get - getById, getAll
+    Post - add address
+    Put - update address
+    Delete - delete address
+ProductCategory
+    Get - getById, getAll
+    Post - add category
+    Delete - delete category
+User
+    Get - getById, getByUsername
+    Post - add user
+    Put - update user
+    Delete - delete user
+
+
+Need to fix
+------------
+1. update the post method name in customer controller and service to addCustomer
+2. Remove comments from all apis
+3. update the validations is realtime passwords validation not string validations
+4. Resource not found replace with Ids
+5. Check dependency checks before deleting the items ex: deleteCustomer dependents on cart, order, and address
+
