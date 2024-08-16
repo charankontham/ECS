@@ -40,7 +40,7 @@ public class ProductReviewController {
         return ResponseEntity.ok(reviews);
     }
 
-    @GetMapping("/?productId={productId}&customerId={customerId}")
+    @GetMapping("/getReviewByProductIdAndCustomerId/{productId}/{customerId}")
     public ResponseEntity<ProductReviewDto> getProductReviewByProductIdAndCustomerId(@PathVariable("productId") int productId, @PathVariable("customerId") int customerId) {
         ProductReviewDto productReviewDto = productReviewServiceInterface.getProductReviewByCustomerIdAndProductId(productId, customerId);
         return ResponseEntity.ok(productReviewDto);
@@ -62,7 +62,7 @@ public class ProductReviewController {
         return HelperFunctions.getResponseEntity(response);
     }
 
-    @DeleteMapping("?productId={productId}&customerId={customerId}")
+    @DeleteMapping("/deleteByProductIdAndCustomerId/{productId}/{customerId}")
     public ResponseEntity<String> deleteProductReviewByProductIdAndCustomerId(@PathVariable("productId") int productId, @PathVariable("customerId") int customerId) {
         boolean isDeleted = productReviewServiceInterface.deleteProductReviewByProductIdAndCustomerId(productId, customerId);
         if(isDeleted){

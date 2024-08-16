@@ -11,9 +11,9 @@ public interface ProductServiceInterface {
 
     List<ProductFinalDto> getAllProducts();
 
-    ProductFinalDto addProduct(ProductDto productDto);
+    Object addProduct(ProductDto productDto);
 
-    ProductFinalDto updateProduct(ProductFinalDto productFinalDto);
+    Object updateProduct(ProductFinalDto productFinalDto);
 
     boolean deleteProduct(int productId);
 

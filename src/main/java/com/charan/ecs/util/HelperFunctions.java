@@ -81,9 +81,12 @@ public class HelperFunctions {
         }
     }
 
-    public static Object validateAddress(int addressId, AddressServiceInterface addressServiceInterface) {
+    public static Object validateAddress(int addressId, int customerId, AddressServiceInterface addressServiceInterface) {
         try {
             AddressDto addressDto = addressServiceInterface.getAddressById(addressId);
+            if(addressDto.getCustomerId() != customerId) {
+                return Constants.AddressNotFound;
+            }
             return Constants.NoErrorFound;
         } catch (ResourceNotFoundException e) {
             if (e.getMessage().contains("Address")) {

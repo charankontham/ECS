@@ -38,7 +38,7 @@ public class Product {
     private String productColor;
 
     @Column(name = "product_weight")
-    private Integer productWeight;
+    private float productWeight;
 
     @Column(name = "product_dimensions")
     private String productDimensions;

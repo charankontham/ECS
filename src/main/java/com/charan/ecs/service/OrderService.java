@@ -101,9 +101,8 @@ public class OrderService implements OrderServiceInterface {
                         customerServiceInterface
                 );
         if (Objects.equals(response, Constants.NoErrorFound)) {
-            response = HelperFunctions.validateAddress(orderDto.getAddressId(), addressServiceInterface);
+            response = HelperFunctions.validateAddress(orderDto.getAddressId(), orderDto.getCustomerId(), addressServiceInterface);
             if (Objects.equals(response, Constants.NoErrorFound)) {
-
                 Order savedOrder = orderRepository.save(OrderMapper.toOrder(orderDto));
                 return OrderMapper.toOrderFinalDto(
                         savedOrder,

@@ -1,6 +1,5 @@
 package com.charan.ecs.dto;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +18,7 @@ public class ProductDto {
     private float productPrice;
     private int productQuantity;
     private String productColor;
-    private Integer productWeight;
+    private float productWeight;
     private String productDimensions;
     private String productCondition;
 }

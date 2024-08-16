@@ -1,24 +1,20 @@
 package com.charan.ecs.service;
 
-import com.charan.ecs.dto.ProductCategoryDto;
 import com.charan.ecs.dto.ProductDto;
 import com.charan.ecs.dto.ProductFinalDto;
 import com.charan.ecs.entity.Product;
-import com.charan.ecs.entity.ProductCategory;
 import com.charan.ecs.exception.ResourceNotFoundException;
-import com.charan.ecs.mapper.ProductCategoryMapper;
 import com.charan.ecs.mapper.ProductMapper;
-import com.charan.ecs.repository.CustomerRepository;
-import com.charan.ecs.repository.ProductCategoryRepository;
 import com.charan.ecs.repository.ProductRepository;
 import com.charan.ecs.service.interfaces.ProductBrandServiceInterface;
 import com.charan.ecs.service.interfaces.ProductCategoryServiceInterface;
 import com.charan.ecs.service.interfaces.ProductServiceInterface;
+import com.charan.ecs.validations.ProductValidation;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,7 +41,10 @@ public class ProductService implements ProductServiceInterface {
     }
 
     @Override
-    public ProductFinalDto addProduct(ProductDto productDto) {
+    public Object addProduct(ProductDto productDto) {
+        if(!ProductValidation.isProductDtoSchemaValid(productDto)){
+            return HttpStatus.BAD_REQUEST;
+        }
         boolean isProductCategoryExists = productCategoryServiceInterface.
                 productCategoryExists(productDto.getProductCategoryId());
         if(isProductCategoryExists){
@@ -56,7 +55,10 @@ public class ProductService implements ProductServiceInterface {
     }
 
     @Override
-    public ProductFinalDto updateProduct(ProductFinalDto productFinalDto) {
+    public Object updateProduct(ProductFinalDto productFinalDto) {
+        if(!ProductValidation.isProductFinalDtoSchemaValid(productFinalDto)){
+            return HttpStatus.BAD_REQUEST;
+        }
         boolean productCategoryExists = productCategoryServiceInterface.
                 productCategoryExists(productFinalDto.getProductCategory().getCategoryId());
         if(productCategoryExists && productRepository.existsById(productFinalDto.getProductId())){

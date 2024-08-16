@@ -2,13 +2,11 @@ package com.charan.ecs.controller;
 
 import com.charan.ecs.dto.ProductDto;
 import com.charan.ecs.dto.ProductFinalDto;
-import com.charan.ecs.service.ProductService;
 import com.charan.ecs.service.interfaces.ProductServiceInterface;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Objects;
 
@@ -32,7 +30,10 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<?> addProduct(@RequestBody ProductDto productDto) {
-        ProductFinalDto newProduct = productServiceInterface.addProduct(productDto);
+        Object newProduct = productServiceInterface.addProduct(productDto);
+        if(Objects.equals(newProduct, HttpStatus.BAD_REQUEST)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Validation Failed!");
+        }
         if(Objects.isNull(newProduct)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ProductCategory not found!");
         }
@@ -41,7 +42,10 @@ public class ProductController {
 
     @PutMapping()
     public ResponseEntity<?> updateProduct(@RequestBody ProductFinalDto productFinalDto) {
-        ProductFinalDto updatedProduct = productServiceInterface.updateProduct(productFinalDto);
+        Object updatedProduct = productServiceInterface.updateProduct(productFinalDto);
+        if(Objects.equals(updatedProduct, HttpStatus.BAD_REQUEST)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Validation Failed!");
+        }
         if(Objects.isNull(updatedProduct)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product/productCategory not found!");
         }
