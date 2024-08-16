@@ -7,8 +7,6 @@ import com.charan.ecs.service.interfaces.CustomerServiceInterface;
 import com.charan.ecs.service.interfaces.ProductServiceInterface;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 

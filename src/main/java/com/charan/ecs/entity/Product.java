@@ -2,7 +2,6 @@ package com.charan.ecs.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.checkerframework.checker.units.qual.C;
 
 @Setter
 @Getter
