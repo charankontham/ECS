@@ -2,7 +2,6 @@ package com.charan.ecs.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.checkerframework.checker.units.qual.C;
 
 @Setter
 @Getter
@@ -38,7 +37,7 @@ public class Product {
     private String productColor;
 
     @Column(name = "product_weight")
-    private Integer productWeight;
+    private float productWeight;
 
     @Column(name = "product_dimensions")
     private String productDimensions;

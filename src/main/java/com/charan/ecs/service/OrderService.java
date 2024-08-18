@@ -1,9 +1,7 @@
 package com.charan.ecs.service;
 
-import com.charan.ecs.dto.CustomerDto;
 import com.charan.ecs.dto.OrderDto;
 import com.charan.ecs.dto.OrderFinalDto;
-import com.charan.ecs.dto.ProductFinalDto;
 import com.charan.ecs.entity.Order;
 import com.charan.ecs.exception.ResourceNotFoundException;
 import com.charan.ecs.mapper.OrderMapper;
@@ -19,7 +17,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -101,9 +98,8 @@ public class OrderService implements OrderServiceInterface {
                         customerServiceInterface
                 );
         if (Objects.equals(response, Constants.NoErrorFound)) {
-            response = HelperFunctions.validateAddress(orderDto.getAddressId(), addressServiceInterface);
+            response = HelperFunctions.validateAddress(orderDto.getAddressId(), orderDto.getCustomerId(), addressServiceInterface);
             if (Objects.equals(response, Constants.NoErrorFound)) {
-
                 Order savedOrder = orderRepository.save(OrderMapper.toOrder(orderDto));
                 return OrderMapper.toOrderFinalDto(
                         savedOrder,
