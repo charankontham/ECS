@@ -10,15 +10,15 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductDto {
-    private int productId;
-    private int productCategoryId;
-    private int productBrandId;
+    private Integer productId;
+    private Integer productCategoryId;
+    private Integer productBrandId;
     private String productName;
     private String productDescription;
-    private float productPrice;
-    private int productQuantity;
+    private Float productPrice;
+    private Integer productQuantity;
     private String productColor;
-    private float productWeight;
+    private Float productWeight;
     private String productDimensions;
     private String productCondition;
 }

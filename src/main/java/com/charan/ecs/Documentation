@@ -41,3 +41,14 @@ Need to fix
 4. Resource not found replace with Ids
 5. Check dependency checks before deleting the items ex: deleteCustomer dependents on cart, order, and address
 
+
+Remove dependencies for deleteCustomer
+--------------------------------------
+1. Remove addresses
+2. Remove orders
+3. Remove carts
+4. Remove productReviews
+5. Remove Customer
+
+Current work : improvising the product component
+

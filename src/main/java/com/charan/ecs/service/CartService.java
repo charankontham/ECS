@@ -15,11 +15,13 @@ import com.charan.ecs.util.Constants;
 import com.charan.ecs.util.HelperFunctions;
 import com.charan.ecs.validations.CartValidation;
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -40,6 +42,12 @@ public class CartService implements CartServiceInterface {
         Cart cart = cartRepository.findByCustomerId(customerId).
                 orElseThrow(() -> new ResourceNotFoundException("Cart not found!"));
         return CartMapper.mapToCartFinalDto(cart, productServiceInterface, customerServiceInterface);
+    }
+
+    @Override
+    public List<CartDto> getCartsByProductId(int productId) {
+        List<Cart> carts = cartRepository.findAllByProductId(productId);
+        return carts.stream().map(CartMapper::mapToCartDto).collect(Collectors.toList());
     }
 
     @Override

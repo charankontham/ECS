@@ -13,13 +13,13 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int productId;
+    private Integer productId;
 
     @Column(name = "product_category_id")
-    private int productCategoryId;
+    private Integer productCategoryId;
 
     @Column(name ="product_brand_id")
-    private int productBrandId;
+    private Integer productBrandId;
 
     @Column(name = "product_name")
     private String productName;
@@ -28,16 +28,16 @@ public class Product {
     private String productDescription;
 
     @Column(name = "product_price")
-    private float productPrice;
+    private Float productPrice;
 
     @Column(name ="product_quantity")
-    private int productQuantity;
+    private Integer productQuantity;
 
     @Column(name = "product_color")
     private String productColor;
 
     @Column(name = "product_weight")
-    private float productWeight;
+    private Float productWeight;
 
     @Column(name = "product_dimensions")
     private String productDimensions;

@@ -51,8 +51,7 @@ public class OrderMapper {
                 addressServiceInterface.getAddressById(order.getAddressId()),
                 ProductMapper.mapProductQuantitiesWithProductFinalDtoList(
                         order.getProductIds(),
-                        order.getProductQuantities(),
-                        productServiceInterface),
+                        order.getProductQuantities()),
                 order.getPaymentType(),
                 order.getPaymentStatus(),
                 order.getOrderDate(),

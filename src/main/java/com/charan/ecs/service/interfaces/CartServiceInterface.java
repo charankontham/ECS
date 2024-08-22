@@ -11,6 +11,8 @@ public interface CartServiceInterface {
 
     CartFinalDto getCartByCustomerId(int customerId);
 
+    List<CartDto> getCartsByProductId(int productId);
+
     Object addCart(CartDto cartDto);
 
     Object updateCart(CartDto cartDto);

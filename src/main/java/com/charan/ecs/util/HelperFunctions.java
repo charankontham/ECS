@@ -2,15 +2,17 @@ package com.charan.ecs.util;
 
 import com.charan.ecs.dto.*;
 import com.charan.ecs.exception.ResourceNotFoundException;
-import com.charan.ecs.service.interfaces.AddressServiceInterface;
-import com.charan.ecs.service.interfaces.CustomerServiceInterface;
-import com.charan.ecs.service.interfaces.ProductServiceInterface;
+import com.charan.ecs.service.interfaces.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class HelperFunctions {
+
+    public static ProductServiceInterface productServiceInterface;
 
     public static boolean checkZeroQuantities(List<Integer> quantities) {
         for (Integer quantity : quantities) {
@@ -42,7 +44,10 @@ public class HelperFunctions {
                 collect(Collectors.toList());
     }
 
-    public static List<ProductFinalDto> getProductFinalDtoList(List<Integer> productIdsList, ProductServiceInterface productServiceInterface) {
+    public static List<ProductFinalDto> getProductFinalDtoList(
+            List<Integer> productIdsList,
+            ProductServiceInterface productServiceInterface
+    ) {
         return productIdsList.stream().map(productServiceInterface::getProduct).toList();
     }
 
@@ -52,7 +57,10 @@ public class HelperFunctions {
                                                                      ProductServiceInterface productServiceInterface,
                                                                      CustomerServiceInterface customerServiceInterface) {
         try {
-            CustomerDto customerDto = customerServiceInterface.getCustomerById(customerId);
+            boolean customerExists = customerServiceInterface.isCustomerExist(customerId);
+            if (!customerExists) {
+                return Constants.CustomerNotFound;
+            }
             List<ProductFinalDto> productFinalDtoList = HelperFunctions.
                     getProductFinalDtoList(productIds, productServiceInterface);
             int count = 0;
@@ -63,9 +71,6 @@ public class HelperFunctions {
             }
             return Constants.NoErrorFound;
         } catch (ResourceNotFoundException e) {
-            if (e.getMessage().contains("Customer")) {
-                return Constants.CustomerNotFound;
-            }
             if (e.getMessage().contains("Product")) {
                 return Constants.ProductNotFound;
             }
@@ -82,7 +87,7 @@ public class HelperFunctions {
     public static Object validateAddress(int addressId, int customerId, AddressServiceInterface addressServiceInterface) {
         try {
             AddressDto addressDto = addressServiceInterface.getAddressById(addressId);
-            if(addressDto.getCustomerId() != customerId) {
+            if (addressDto.getCustomerId() != customerId) {
                 return Constants.AddressNotFound;
             }
             return Constants.NoErrorFound;
@@ -111,31 +116,69 @@ public class HelperFunctions {
 
     public static ResponseEntity<?> getResponseEntity(Object response) {
         if (Objects.equals(response, Constants.ProductNotFound)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product Not Found!");
         } else if (Objects.equals(response, Constants.CustomerNotFound)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer Not Found!");
         } else if (Objects.equals(response, Constants.ProductQuantityExceeded)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ProductQuantities Exceeded!");
         } else if (Objects.equals(response, Constants.AddressNotFound)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Address not found!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Address Not Found!");
         } else if (Objects.equals(response, Constants.OrderNotFound)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order Not Found!");
         } else if (Objects.equals(response, Constants.CartNotFound)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cart not found!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cart Not Found!");
         } else if (Objects.equals(response, Constants.UserNotFound)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User Not Found!");
         } else if (Objects.equals(response, Constants.ProductCategoryNotFound)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ProductCategory not found!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ProductCategory Not Found!");
         } else if (Objects.equals(response, Constants.ProductBrandNotFound)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ProductBrand not found!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ProductBrand Not Found!");
         } else if (Objects.equals(response, Constants.ProductReviewNotFound)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ProductReview not found!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ProductReview Not Found!");
         } else if (Objects.equals(response, HttpStatus.CONFLICT)) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Duplicate Entry!");
         } else if (Objects.equals(response, HttpStatus.BAD_REQUEST)) {
             return new ResponseEntity<>("Validation Failed/Bad Request!", HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    public static void removeCartItemsByProductId(Integer productId, CartServiceInterface cartServiceInterface) {
+        List<CartDto> carts = cartServiceInterface.getCartsByProductId(productId);
+        for (CartDto cartDto : carts) {
+            List<Integer> productIds = cartDto.getProductIds();
+            List<Integer> productQuantities = cartDto.getProductQuantities();
+            if (productIds.size() == 1) {
+                cartServiceInterface.deleteCart(cartDto.getCartId());
+            } else {
+                productQuantities.remove(productIds.indexOf(productId));
+                productIds.remove(productId);
+                cartDto.setProductIds(productIds);
+                cartDto.setProductQuantities(productQuantities);
+                cartServiceInterface.updateCart(cartDto);
+            }
+        }
+    }
+
+    public static void removeOrderItemsByProductId(Integer productId, OrderServiceInterface orderServiceInterface) {
+        List<OrderDto> orders = orderServiceInterface.getAllOrdersByProductId(productId);
+        for (OrderDto orderDto : orders) {
+            List<Integer> productIds = orderDto.getProductIds();
+            List<Integer> productQuantities = orderDto.getProductQuantities();
+            if (productIds.size() == 1) {
+                orderServiceInterface.deleteOrderById(orderDto.getOrderId());
+            } else {
+                productQuantities.remove(productIds.indexOf(productId));
+                productIds.remove(productId);
+                orderDto.setProductIds(productIds);
+                orderDto.setProductQuantities(productQuantities);
+                orderServiceInterface.updateOrder(orderDto);
+            }
+        }
+    }
+
+    public static boolean isProductExists(Integer productId) {
+        return productServiceInterface.isProductExists(productId);
     }
 
 }

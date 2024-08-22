@@ -31,7 +31,7 @@ public class CartMapper {
         return new CartFinalDto(
                 cart.getCartId(),
                 customerServiceInterface.getCustomerById(cart.getCustomerId()),
-                ProductMapper.mapProductQuantitiesWithProductFinalDtoList(cart.getProductIds(), cart.getQuantities(), productServiceInterface)
+                ProductMapper.mapProductQuantitiesWithProductFinalDtoList(cart.getProductIds(), cart.getQuantities())
         );
     }
 }

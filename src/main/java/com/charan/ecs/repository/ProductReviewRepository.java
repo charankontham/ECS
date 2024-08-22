@@ -18,4 +18,6 @@ public interface ProductReviewRepository extends JpaRepository<ProductReview, In
     boolean existsByProductIdAndCustomerId(int productId, int customerId);
 
     void deleteByProductIdAndCustomerId(int productId, int customerId);
+
+    void deleteByProductId(int productId);
 }

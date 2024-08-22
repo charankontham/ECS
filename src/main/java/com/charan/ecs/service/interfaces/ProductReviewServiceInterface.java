@@ -24,6 +24,8 @@ public interface ProductReviewServiceInterface {
 
     boolean deleteProductReviewById(int reviewId);
 
+    void deleteProductReviewsByProductId(int productId);
+
     boolean deleteProductReviewByProductIdAndCustomerId(int productId, int customerId);
 
     boolean productReviewExists(int reviewId);

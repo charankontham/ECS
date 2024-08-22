@@ -51,6 +51,12 @@ public class OrderService implements OrderServiceInterface {
     }
 
     @Override
+    public List<OrderDto> getAllOrdersByProductId(int productId) {
+        List<Order> orders = orderRepository.findAllByProductId(productId);
+        return orders.stream().map(OrderMapper::toOrderDto).collect(Collectors.toList());
+    }
+
+    @Override
     public List<OrderFinalDto> getAllOrders() {
         List<Order> orders = orderRepository.findAll();
         return orders.stream().map((order) -> OrderMapper.toOrderFinalDto(
@@ -72,13 +78,21 @@ public class OrderService implements OrderServiceInterface {
 
     @Override
     public Object updateOrder(OrderDto orderDto) {
+        return this.updateOrder(orderDto, false);
+    }
+
+    @Override
+    public Object updateOrder(OrderDto orderDto, boolean forceUpdate) {
         boolean orderExists = orderRepository.existsById(orderDto.getOrderId());
         if (orderExists) {
-            Order order = orderRepository.findById(orderDto.getOrderId()).orElseThrow();
+            Order order = orderRepository.findById(orderDto.getOrderId()).
+                    orElseThrow(() -> new ResourceNotFoundException("Order Not Found!"));
             OrderDto existingOrderDto = OrderMapper.toOrderDto(order);
             orderDto.setCustomerId(existingOrderDto.getCustomerId());
-            orderDto.setProductIds(existingOrderDto.getProductIds());
-            orderDto.setProductQuantities(existingOrderDto.getProductQuantities());
+            if(!forceUpdate){
+                orderDto.setProductIds(existingOrderDto.getProductIds());
+                orderDto.setProductQuantities(existingOrderDto.getProductQuantities());
+            }
             return validateAndSaveOrder(orderDto);
         }
         return Constants.OrderNotFound;
@@ -109,5 +123,10 @@ public class OrderService implements OrderServiceInterface {
             }
         }
         return response;
+    }
+
+    @Override
+    public void deleteOrderById(int orderId) {
+        orderRepository.deleteById(orderId);
     }
 }

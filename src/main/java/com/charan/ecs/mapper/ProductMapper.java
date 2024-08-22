@@ -5,21 +5,19 @@ import com.charan.ecs.dto.ProductCategoryDto;
 import com.charan.ecs.dto.ProductDto;
 import com.charan.ecs.dto.ProductFinalDto;
 import com.charan.ecs.entity.Product;
-import com.charan.ecs.entity.ProductBrand;
-import com.charan.ecs.entity.ProductCategory;
-import com.charan.ecs.repository.ProductCategoryRepository;
 import com.charan.ecs.service.interfaces.ProductBrandServiceInterface;
 import com.charan.ecs.service.interfaces.ProductCategoryServiceInterface;
 import com.charan.ecs.service.interfaces.ProductServiceInterface;
 import com.charan.ecs.util.HelperFunctions;
 import lombok.AllArgsConstructor;
-
 import java.util.List;
-import java.util.Objects;
 
 @AllArgsConstructor
 public class ProductMapper {
-    private static ProductCategoryRepository productCategoryRepository;
+
+    private static ProductCategoryServiceInterface productCategoryServiceInterface;
+    private static ProductBrandServiceInterface productBrandServiceInterface;
+    private static ProductServiceInterface productServiceInterface;
 
     public static ProductDto mapToProductDto(Product product) {
         return new ProductDto(
@@ -53,9 +51,7 @@ public class ProductMapper {
         );
     }
 
-    public static ProductFinalDto mapToProductFinalDto(Product product,
-                                                       ProductCategoryServiceInterface productCategoryServiceInterface,
-                                                       ProductBrandServiceInterface productBrandServiceInterface) {
+    public static ProductFinalDto mapToProductFinalDto(Product product) {
         ProductCategoryDto productCategoryDto = productCategoryServiceInterface.getProductCategoryById(product.getProductCategoryId());
         ProductBrandDto productBrandDto = productBrandServiceInterface.getProductBrandById(product.getProductBrandId());
         return new ProductFinalDto(
@@ -89,7 +85,7 @@ public class ProductMapper {
         );
     }
 
-    public static List<ProductFinalDto> mapProductQuantitiesWithProductFinalDtoList(String productIds, String productQuantities, ProductServiceInterface productServiceInterface) {
+    public static List<ProductFinalDto> mapProductQuantitiesWithProductFinalDtoList(String productIds, String productQuantities) {
         int count = 0;
         List<Integer> productIdsList = HelperFunctions.mapToIntegerArrayList(productIds);
         List<Integer> productQuantitiesList = HelperFunctions.mapToIntegerArrayList(productQuantities);
