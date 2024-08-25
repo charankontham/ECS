@@ -84,8 +84,8 @@ public class ProductService implements ProductServiceInterface {
             return HttpStatus.BAD_REQUEST;
         }
         boolean productCategoryExists = productCategoryServiceInterface.
-                productCategoryExists(productDto.getProductCategoryId());
-        boolean productBrandExists = productBrandServiceInterface.productBrandExists(productDto.getProductBrandId());
+                isProductCategoryExists(productDto.getProductCategoryId());
+        boolean productBrandExists = productBrandServiceInterface.isProductBrandExists(productDto.getProductBrandId());
         if(!productBrandExists){
             return Constants.ProductBrandNotFound;
         } else if (!productCategoryExists) {
