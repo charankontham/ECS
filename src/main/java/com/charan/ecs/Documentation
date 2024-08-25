@@ -40,4 +40,17 @@ Need to fix
 3. update the validations is realtime passwords validation not string validations
 4. Resource not found replace with Ids
 5. Check dependency checks before deleting the items ex: deleteCustomer dependents on cart, order, and address
+6. Change all primitive data types to Wrapper Classes
+
+
+Remove dependencies for deleteCustomer
+--------------------------------------
+1. Remove addresses
+2. Remove orders
+3. Remove carts
+4. Remove productReviews
+5. Remove Customer
+
+
+2. Update the service and interfaces names with IproductService and ProductServiceImpl
 

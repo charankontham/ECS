@@ -5,22 +5,22 @@ import com.charan.ecs.entity.Address;
 import com.charan.ecs.exception.ResourceNotFoundException;
 import com.charan.ecs.mapper.AddressMapper;
 import com.charan.ecs.repository.AddressRepository;
-import com.charan.ecs.repository.CustomerRepository;
 import com.charan.ecs.service.interfaces.AddressServiceInterface;
+import com.charan.ecs.service.interfaces.CustomerServiceInterface;
 import com.charan.ecs.validations.AddressValidation;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
 public class AddressService implements AddressServiceInterface {
 
-    private final AddressRepository addressRepository;
-    private final CustomerRepository customerRepository;
+    @Autowired
+    private AddressRepository addressRepository;
+    @Autowired
+    private CustomerServiceInterface customerServiceInterface;
 
     @Override
     public AddressDto getAddressById(int addressId) {
@@ -43,7 +43,7 @@ public class AddressService implements AddressServiceInterface {
 
     @Override
     public Object addAddress(AddressDto addressDto) {
-        boolean customerExists = customerRepository.existsById(addressDto.getCustomerId());
+        boolean customerExists = customerServiceInterface.isCustomerExist(addressDto.getCustomerId());
         if(!customerExists) {
             return HttpStatus.NOT_FOUND;
         }
@@ -60,7 +60,7 @@ public class AddressService implements AddressServiceInterface {
 
     @Override
     public Object updateAddress(AddressDto addressDto) {
-        boolean customerExists = customerRepository.existsById(addressDto.getCustomerId());
+        boolean customerExists = customerServiceInterface.isCustomerExist(addressDto.getCustomerId());
         if(!customerExists){
             return HttpStatus.NOT_ACCEPTABLE;
         }
@@ -94,7 +94,7 @@ public class AddressService implements AddressServiceInterface {
     }
 
     @Override
-    public boolean addressExists(int addressId) {
+    public boolean isAddressExists(int addressId) {
         return addressRepository.existsById(addressId);
     }
 }

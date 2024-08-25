@@ -20,5 +20,5 @@ public interface AddressServiceInterface {
 
     void deleteAllAddressByIds(List<Integer> addressIds);
 
-    boolean addressExists(int addressId);
+    boolean isAddressExists(int addressId);
 }

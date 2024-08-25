@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ProductServiceInterface {
 
-    ProductFinalDto getProduct(int productId);
+    ProductFinalDto getProduct(Integer productId);
 
     List<ProductFinalDto> getAllProducts();
 
@@ -15,7 +15,7 @@ public interface ProductServiceInterface {
 
     Object updateProduct(ProductFinalDto productFinalDto);
 
-    boolean deleteProduct(int productId);
+    boolean deleteProduct(Integer productId);
 
-    boolean isProductExists(int productId);
+    boolean isProductExists(Integer productId);
 }

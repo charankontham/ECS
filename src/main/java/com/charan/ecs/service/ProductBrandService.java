@@ -7,17 +7,17 @@ import com.charan.ecs.mapper.ProductBrandMapper;
 import com.charan.ecs.repository.ProductBrandRepository;
 import com.charan.ecs.service.interfaces.ProductBrandServiceInterface;
 import com.charan.ecs.validations.BasicValidation;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
 public class ProductBrandService implements ProductBrandServiceInterface {
-    private final ProductBrandRepository productBrandRepository;
+
+    @Autowired
+    private ProductBrandRepository productBrandRepository;
 
     @Override
     public ProductBrandDto getProductBrandById(int brandId) {
@@ -70,7 +70,7 @@ public class ProductBrandService implements ProductBrandServiceInterface {
     }
 
     @Override
-    public boolean productBrandExists(int brandId) {
+    public boolean isProductBrandExists(int brandId) {
         return productBrandRepository.existsById(brandId);
     }
 }

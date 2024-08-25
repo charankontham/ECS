@@ -5,18 +5,18 @@ import com.charan.ecs.entity.ProductCategory;
 import com.charan.ecs.exception.ResourceNotFoundException;
 import com.charan.ecs.mapper.ProductCategoryMapper;
 import com.charan.ecs.repository.ProductCategoryRepository;
-import com.charan.ecs.repository.ProductRepository;
 import com.charan.ecs.service.interfaces.ProductCategoryServiceInterface;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
 @Service
 public class ProductCategoryService implements ProductCategoryServiceInterface {
-    private final ProductCategoryRepository productCategoryRepository;
+
+    @Autowired
+    private ProductCategoryRepository productCategoryRepository;
 
     @Override
     public ProductCategoryDto getProductCategoryById(int categoryId) {
@@ -65,7 +65,7 @@ public class ProductCategoryService implements ProductCategoryServiceInterface {
     }
 
     @Override
-    public boolean productCategoryExists(int categoryId) {
+    public boolean isProductCategoryExists(int categoryId) {
         return productCategoryRepository.existsById(categoryId);
     }
 }

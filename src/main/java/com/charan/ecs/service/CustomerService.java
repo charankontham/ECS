@@ -9,6 +9,7 @@ import com.charan.ecs.service.interfaces.CustomerServiceInterface;
 import com.charan.ecs.validations.CustomerValidation;
 import com.google.common.hash.Hashing;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +19,9 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
 public class CustomerService implements CustomerServiceInterface {
+
+    @Autowired
     private CustomerRepository customerRepository;
 
     @Override

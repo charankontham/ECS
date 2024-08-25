@@ -3,18 +3,18 @@ package com.charan.ecs.controller;
 import com.charan.ecs.dto.ProductReviewDto;
 import com.charan.ecs.service.interfaces.ProductReviewServiceInterface;
 import com.charan.ecs.util.HelperFunctions;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
-@AllArgsConstructor
 @RequestMapping("/api/productReview")
 public class ProductReviewController {
-    private final ProductReviewServiceInterface productReviewServiceInterface;
+
+    @Autowired
+    private ProductReviewServiceInterface productReviewServiceInterface;
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductReviewDto> getProductReviewById(@PathVariable("id") int reviewId) {

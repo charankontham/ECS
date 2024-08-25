@@ -10,12 +10,16 @@ public interface OrderServiceInterface {
 
     List<OrderFinalDto> getAllOrdersByCustomerId(int customerId);
 
+    List<OrderDto> getAllOrdersByProductId(int productId);
+
     List<OrderFinalDto> getAllOrders();
 
     Object addOrder(OrderDto orderDto);
 
     Object updateOrder(OrderDto orderDto);
 
-    Object validateAndSaveOrder(OrderDto orderDto);
+    Object updateOrder(OrderDto orderDto, boolean forceUpdate);
+
+    void deleteOrderById(int orderId);
 
 }

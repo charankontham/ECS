@@ -4,17 +4,19 @@ import com.charan.ecs.dto.CartDto;
 import com.charan.ecs.service.interfaces.CartServiceInterface;
 import com.charan.ecs.util.Constants;
 import com.charan.ecs.util.HelperFunctions;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.Objects;
 
-@AllArgsConstructor
 @RestController
 @RequestMapping("/api/cart")
 public class CartController {
-    private final CartServiceInterface cartServiceInterface;
+
+    @Autowired
+    private CartServiceInterface cartServiceInterface;
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getCart(@PathVariable("id") int cartId) {

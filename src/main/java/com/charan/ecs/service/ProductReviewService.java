@@ -8,11 +8,10 @@ import com.charan.ecs.repository.ProductReviewRepository;
 import com.charan.ecs.service.interfaces.CustomerServiceInterface;
 import com.charan.ecs.service.interfaces.OrderServiceInterface;
 import com.charan.ecs.service.interfaces.ProductReviewServiceInterface;
-import com.charan.ecs.service.interfaces.ProductServiceInterface;
 import com.charan.ecs.util.Constants;
 import com.charan.ecs.util.HelperFunctions;
 import com.charan.ecs.validations.ProductReviewValidation;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,14 +19,16 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
 @Service
 @Transactional
 public class ProductReviewService implements ProductReviewServiceInterface {
-    private final ProductReviewRepository productReviewRepository;
-    private final ProductServiceInterface productServiceInterface;
-    private final CustomerServiceInterface customerServiceInterface;
-    private final OrderServiceInterface orderServiceInterface;
+
+    @Autowired
+    private ProductReviewRepository productReviewRepository;
+    @Autowired
+    private CustomerServiceInterface customerServiceInterface;
+    @Autowired
+    private OrderServiceInterface orderServiceInterface;
 
     @Override
     public ProductReviewDto getProductReviewById(int reviewId) {
@@ -100,6 +101,11 @@ public class ProductReviewService implements ProductReviewServiceInterface {
     }
 
     @Override
+    public void deleteProductReviewsByProductId(int productId) {
+        productReviewRepository.deleteByProductId(productId);
+    }
+
+    @Override
     public boolean deleteProductReviewByProductIdAndCustomerId(int productId, int customerId) {
         boolean productReviewExists = productReviewRepository.existsByProductIdAndCustomerId(productId, customerId);
         if (productReviewExists) {
@@ -110,14 +116,13 @@ public class ProductReviewService implements ProductReviewServiceInterface {
     }
 
     @Override
-    public boolean productReviewExists(int reviewId) {
+    public boolean isProductReviewExists(int reviewId) {
         return productReviewRepository.existsById(reviewId);
     }
 
-    @Override
-    public Object validateAndSaveProductReview(ProductReviewDto productReviewDto) throws DataIntegrityViolationException {
+    private Object validateAndSaveProductReview(ProductReviewDto productReviewDto) throws DataIntegrityViolationException {
         boolean customerExists = customerServiceInterface.isCustomerExist(productReviewDto.getCustomerId());
-        boolean productExists = productServiceInterface.isProductExists(productReviewDto.getProductId());
+        boolean productExists = HelperFunctions.isProductExists(productReviewDto.getProductId());
         boolean orderExists = HelperFunctions.isOrderExistsByProductId(
                 productReviewDto.getProductId(),
                 orderServiceInterface.getAllOrdersByCustomerId(productReviewDto.getCustomerId())
