@@ -11,8 +11,6 @@ import com.charan.ecs.service.interfaces.ProductReviewServiceInterface;
 import com.charan.ecs.util.Constants;
 import com.charan.ecs.util.HelperFunctions;
 import com.charan.ecs.validations.ProductReviewValidation;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -23,12 +21,13 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-@Setter
-@Getter
 public class ProductReviewService implements ProductReviewServiceInterface {
 
+    @Autowired
     private ProductReviewRepository productReviewRepository;
+    @Autowired
     private CustomerServiceInterface customerServiceInterface;
+    @Autowired
     private OrderServiceInterface orderServiceInterface;
 
     @Override
@@ -117,12 +116,11 @@ public class ProductReviewService implements ProductReviewServiceInterface {
     }
 
     @Override
-    public boolean productReviewExists(int reviewId) {
+    public boolean isProductReviewExists(int reviewId) {
         return productReviewRepository.existsById(reviewId);
     }
 
-    @Override
-    public Object validateAndSaveProductReview(ProductReviewDto productReviewDto) throws DataIntegrityViolationException {
+    private Object validateAndSaveProductReview(ProductReviewDto productReviewDto) throws DataIntegrityViolationException {
         boolean customerExists = customerServiceInterface.isCustomerExist(productReviewDto.getCustomerId());
         boolean productExists = HelperFunctions.isProductExists(productReviewDto.getProductId());
         boolean orderExists = HelperFunctions.isOrderExistsByProductId(

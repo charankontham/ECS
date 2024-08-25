@@ -1,9 +1,7 @@
 package com.charan.ecs.service.interfaces;
 
 import com.charan.ecs.dto.ProductReviewDto;
-import org.springframework.dao.DataIntegrityViolationException;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 public interface ProductReviewServiceInterface {
@@ -28,7 +26,5 @@ public interface ProductReviewServiceInterface {
 
     boolean deleteProductReviewByProductIdAndCustomerId(int productId, int customerId);
 
-    boolean productReviewExists(int reviewId);
-
-    Object validateAndSaveProductReview(ProductReviewDto productReviewDto) throws DataIntegrityViolationException;
+    boolean isProductReviewExists(int reviewId);
 }

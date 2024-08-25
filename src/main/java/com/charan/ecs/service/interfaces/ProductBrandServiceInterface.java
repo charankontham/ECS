@@ -16,7 +16,7 @@ public interface ProductBrandServiceInterface {
 
     boolean deleteProductBrand(int brandId);
 
-    boolean productBrandExists(int brandId);
+    boolean isProductBrandExists(int brandId);
 
 
 }

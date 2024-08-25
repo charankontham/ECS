@@ -5,18 +5,18 @@ import com.charan.ecs.dto.ProductFinalDto;
 import com.charan.ecs.service.interfaces.ProductServiceInterface;
 import com.charan.ecs.util.Constants;
 import com.charan.ecs.util.HelperFunctions;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.Objects;
 
 @RestController
-@AllArgsConstructor
 @RequestMapping("/api/product")
 public class ProductController {
-    private final ProductServiceInterface productServiceInterface;
+
+    @Autowired
+    private ProductServiceInterface productServiceInterface;
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductFinalDto> getProductById(@PathVariable("id") int productId) {

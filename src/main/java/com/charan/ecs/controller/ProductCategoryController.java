@@ -1,22 +1,20 @@
 package com.charan.ecs.controller;
 
 import com.charan.ecs.dto.ProductCategoryDto;
-import com.charan.ecs.entity.ProductCategory;
 import com.charan.ecs.service.interfaces.ProductCategoryServiceInterface;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
-@AllArgsConstructor
 @RestController
 @RequestMapping("/api/productCategory")
 public class ProductCategoryController {
-    private final ProductCategoryServiceInterface productCategoryServiceInterface;
+
+    @Autowired
+    private ProductCategoryServiceInterface productCategoryServiceInterface;
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getProductCategoryById(@PathVariable("id") int categoryId) {

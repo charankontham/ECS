@@ -8,16 +8,15 @@ import com.charan.ecs.repository.UserRepository;
 import com.charan.ecs.service.interfaces.UserServiceInterface;
 import com.charan.ecs.validations.UserValidation;
 import com.google.common.hash.Hashing;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 
 @Service
-@AllArgsConstructor
 public class UserService implements UserServiceInterface {
-    private final UserRepository userRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public UserDto getUserById(int userId) {

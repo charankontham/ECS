@@ -5,10 +5,10 @@ import com.charan.ecs.dto.OrderFinalDto;
 import com.charan.ecs.entity.Order;
 import com.charan.ecs.service.interfaces.AddressServiceInterface;
 import com.charan.ecs.service.interfaces.CustomerServiceInterface;
-import com.charan.ecs.service.interfaces.ProductServiceInterface;
 import com.charan.ecs.util.HelperFunctions;
 
 public class OrderMapper {
+
     public static OrderDto toOrderDto(Order order) {
         return new OrderDto(
                 order.getOrderId(),
@@ -39,11 +39,9 @@ public class OrderMapper {
         );
     }
 
-    public static OrderFinalDto toOrderFinalDto(
-            Order order,
-            ProductServiceInterface productServiceInterface,
-            CustomerServiceInterface customerServiceInterface,
-            AddressServiceInterface addressServiceInterface)
+    public static OrderFinalDto toOrderFinalDto(Order order,
+                                                CustomerServiceInterface customerServiceInterface,
+                                                AddressServiceInterface addressServiceInterface)
     {
         return new OrderFinalDto(
                 order.getOrderId(),

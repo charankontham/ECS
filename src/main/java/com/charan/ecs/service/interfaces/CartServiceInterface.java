@@ -19,6 +19,4 @@ public interface CartServiceInterface {
 
     boolean deleteCart(int cartId);
 
-    Object validateAndSaveCart(CartDto cartDto);
-
 }

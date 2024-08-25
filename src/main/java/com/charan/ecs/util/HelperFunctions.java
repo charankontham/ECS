@@ -3,16 +3,18 @@ package com.charan.ecs.util;
 import com.charan.ecs.dto.*;
 import com.charan.ecs.exception.ResourceNotFoundException;
 import com.charan.ecs.service.interfaces.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Setter
 public class HelperFunctions {
 
     public static ProductServiceInterface productServiceInterface;
+    private static CustomerServiceInterface customerServiceInterface;
+    private static AddressServiceInterface addressServiceInterface;
 
     public static boolean checkZeroQuantities(List<Integer> quantities) {
         for (Integer quantity : quantities) {
@@ -45,24 +47,21 @@ public class HelperFunctions {
     }
 
     public static List<ProductFinalDto> getProductFinalDtoList(
-            List<Integer> productIdsList,
-            ProductServiceInterface productServiceInterface
+            List<Integer> productIdsList
     ) {
         return productIdsList.stream().map(productServiceInterface::getProduct).toList();
     }
 
     public static Object validateCustomerProductAndProductQuantities(int customerId,
                                                                      List<Integer> productIds,
-                                                                     List<Integer> productQuantities,
-                                                                     ProductServiceInterface productServiceInterface,
-                                                                     CustomerServiceInterface customerServiceInterface) {
+                                                                     List<Integer> productQuantities) {
         try {
             boolean customerExists = customerServiceInterface.isCustomerExist(customerId);
             if (!customerExists) {
                 return Constants.CustomerNotFound;
             }
             List<ProductFinalDto> productFinalDtoList = HelperFunctions.
-                    getProductFinalDtoList(productIds, productServiceInterface);
+                    getProductFinalDtoList(productIds);
             int count = 0;
             for (ProductFinalDto productFinalDto : productFinalDtoList) {
                 if (productQuantities.get(count++) > productFinalDto.getProductQuantity()) {
@@ -84,7 +83,7 @@ public class HelperFunctions {
         }
     }
 
-    public static Object validateAddress(int addressId, int customerId, AddressServiceInterface addressServiceInterface) {
+    public static Object validateAddress(int addressId, int customerId) {
         try {
             AddressDto addressDto = addressServiceInterface.getAddressById(addressId);
             if (addressDto.getCustomerId() != customerId) {

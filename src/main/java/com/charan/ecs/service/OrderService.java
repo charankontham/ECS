@@ -9,11 +9,10 @@ import com.charan.ecs.repository.OrderRepository;
 import com.charan.ecs.service.interfaces.AddressServiceInterface;
 import com.charan.ecs.service.interfaces.CustomerServiceInterface;
 import com.charan.ecs.service.interfaces.OrderServiceInterface;
-import com.charan.ecs.service.interfaces.ProductServiceInterface;
 import com.charan.ecs.util.Constants;
 import com.charan.ecs.util.HelperFunctions;
 import com.charan.ecs.validations.OrderValidation;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -22,32 +21,33 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
 public class OrderService implements OrderServiceInterface {
+
+    @Autowired
     private OrderRepository orderRepository;
-    private final CustomerServiceInterface customerServiceInterface;
-    private final ProductServiceInterface productServiceInterface;
-    private final AddressServiceInterface addressServiceInterface;
+    @Autowired
+    private CustomerServiceInterface customerServiceInterface;
+    @Autowired
+    private AddressServiceInterface addressServiceInterface;
 
     @Override
     public OrderFinalDto getOrderById(int orderId) {
         Order order = orderRepository.findById(orderId).
                 orElseThrow(() -> new ResourceNotFoundException("Order not found!"));
-        return OrderMapper.toOrderFinalDto(
-                order,
-                productServiceInterface,
-                customerServiceInterface,
-                addressServiceInterface);
+        return OrderMapper.toOrderFinalDto(order, customerServiceInterface, addressServiceInterface);
     }
 
     @Override
     public List<OrderFinalDto> getAllOrdersByCustomerId(int customerId) {
         List<Order> orders = orderRepository.findByCustomerId(customerId);
-        return orders.stream().map((order) -> OrderMapper.toOrderFinalDto(
-                order,
-                productServiceInterface,
-                customerServiceInterface,
-                addressServiceInterface)).collect(Collectors.toList());
+        return orders.stream().
+                map(
+                        (order) -> OrderMapper.toOrderFinalDto(
+                                order,
+                                customerServiceInterface,
+                                addressServiceInterface
+                        )
+                ).collect(Collectors.toList());
     }
 
     @Override
@@ -59,12 +59,15 @@ public class OrderService implements OrderServiceInterface {
     @Override
     public List<OrderFinalDto> getAllOrders() {
         List<Order> orders = orderRepository.findAll();
-        return orders.stream().map((order) -> OrderMapper.toOrderFinalDto(
-                order,
-                productServiceInterface,
-                customerServiceInterface,
-                addressServiceInterface)).collect(Collectors.toList()
-        );
+        return orders.stream().
+                map(
+                        (order) -> OrderMapper.toOrderFinalDto(
+                                order,
+                                customerServiceInterface,
+                                addressServiceInterface
+                        )
+                ).collect(Collectors.toList()
+                );
     }
 
     @Override
@@ -89,7 +92,7 @@ public class OrderService implements OrderServiceInterface {
                     orElseThrow(() -> new ResourceNotFoundException("Order Not Found!"));
             OrderDto existingOrderDto = OrderMapper.toOrderDto(order);
             orderDto.setCustomerId(existingOrderDto.getCustomerId());
-            if(!forceUpdate){
+            if (!forceUpdate) {
                 orderDto.setProductIds(existingOrderDto.getProductIds());
                 orderDto.setProductQuantities(existingOrderDto.getProductQuantities());
             }
@@ -98,8 +101,7 @@ public class OrderService implements OrderServiceInterface {
         return Constants.OrderNotFound;
     }
 
-    @Override
-    public Object validateAndSaveOrder(OrderDto orderDto) {
+    private Object validateAndSaveOrder(OrderDto orderDto) {
         if (!OrderValidation.validateOrderRequestSchema(orderDto)) {
             return HttpStatus.BAD_REQUEST;
         }
@@ -107,19 +109,18 @@ public class OrderService implements OrderServiceInterface {
                 validateCustomerProductAndProductQuantities(
                         orderDto.getCustomerId(),
                         orderDto.getProductIds(),
-                        orderDto.getProductQuantities(),
-                        productServiceInterface,
-                        customerServiceInterface
+                        orderDto.getProductQuantities()
                 );
         if (Objects.equals(response, Constants.NoErrorFound)) {
-            response = HelperFunctions.validateAddress(orderDto.getAddressId(), orderDto.getCustomerId(), addressServiceInterface);
+            response = HelperFunctions.validateAddress(orderDto.getAddressId(), orderDto.getCustomerId());
             if (Objects.equals(response, Constants.NoErrorFound)) {
                 Order savedOrder = orderRepository.save(OrderMapper.toOrder(orderDto));
-                return OrderMapper.toOrderFinalDto(
-                        savedOrder,
-                        productServiceInterface,
-                        customerServiceInterface,
-                        addressServiceInterface);
+                return OrderMapper.
+                        toOrderFinalDto(
+                                savedOrder,
+                                customerServiceInterface,
+                                addressServiceInterface
+                        );
             }
         }
         return response;

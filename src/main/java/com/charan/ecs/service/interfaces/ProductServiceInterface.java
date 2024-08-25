@@ -18,6 +18,4 @@ public interface ProductServiceInterface {
     boolean deleteProduct(Integer productId);
 
     boolean isProductExists(Integer productId);
-
-    Object validateAndSaveOrUpdateProduct(ProductDto productDto);
 }

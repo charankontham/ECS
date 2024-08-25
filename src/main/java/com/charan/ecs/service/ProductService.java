@@ -8,36 +8,42 @@ import com.charan.ecs.mapper.ProductMapper;
 import com.charan.ecs.repository.ProductRepository;
 import com.charan.ecs.service.interfaces.*;
 import com.charan.ecs.util.Constants;
-import com.charan.ecs.util.RemoveDependencies;
 import com.charan.ecs.validations.ProductValidation;
-import lombok.Getter;
-import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Setter
-@Getter
 @Service
 public class ProductService implements ProductServiceInterface {
 
+    @Autowired
     private ProductRepository productRepository;
+    @Autowired
     private ProductCategoryServiceInterface productCategoryServiceInterface;
+    @Autowired
     private ProductBrandServiceInterface productBrandServiceInterface;
+    @Autowired
+    private RemoveDependencies removeDependencies;
 
     @Override
     public ProductFinalDto getProduct(Integer productId) {
         Product product = productRepository.findById(productId).
                 orElseThrow(() -> new ResourceNotFoundException("Product Not Found!"));
-        return ProductMapper.mapToProductFinalDto(product);
+        return ProductMapper.mapToProductFinalDto(product, productCategoryServiceInterface, productBrandServiceInterface);
     }
 
     @Override
     public List<ProductFinalDto> getAllProducts() {
         List<Product> products = productRepository.findAll();
-        return products.stream().map(ProductMapper::mapToProductFinalDto).collect(Collectors.toList());
+        return products.stream().map((product) -> ProductMapper.
+                mapToProductFinalDto(
+                        product,
+                        productCategoryServiceInterface,
+                        productBrandServiceInterface)
+                ).
+                collect(Collectors.toList());
     }
 
     @Override
@@ -61,7 +67,7 @@ public class ProductService implements ProductServiceInterface {
     @Override
     public boolean deleteProduct(Integer productId) {
         if(productId!=0 && productRepository.existsById(productId)){
-            RemoveDependencies.deleteProductDependencies(productId);
+            removeDependencies.deleteProductDependencies(productId);
             productRepository.deleteById(productId);
             return true;
         }
@@ -73,8 +79,7 @@ public class ProductService implements ProductServiceInterface {
         return productRepository.existsById(productId);
     }
 
-    @Override
-    public Object validateAndSaveOrUpdateProduct(ProductDto productDto) {
+    private Object validateAndSaveOrUpdateProduct(ProductDto productDto) {
         if(!ProductValidation.isProductDtoSchemaValid(productDto)){
             return HttpStatus.BAD_REQUEST;
         }
@@ -88,7 +93,7 @@ public class ProductService implements ProductServiceInterface {
         } else {
             Product product = productRepository.
                     save(ProductMapper.mapToProduct(productDto));
-            return ProductMapper.mapToProductFinalDto(product);
+            return ProductMapper.mapToProductFinalDto(product, productCategoryServiceInterface, productBrandServiceInterface);
         }
     }
 }

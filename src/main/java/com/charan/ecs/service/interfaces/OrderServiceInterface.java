@@ -20,8 +20,6 @@ public interface OrderServiceInterface {
 
     Object updateOrder(OrderDto orderDto, boolean forceUpdate);
 
-    Object validateAndSaveOrder(OrderDto orderDto);
-
     void deleteOrderById(int orderId);
 
 }

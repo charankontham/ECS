@@ -2,7 +2,7 @@ package com.charan.ecs.controller;
 
 import com.charan.ecs.dto.UserDto;
 import com.charan.ecs.service.interfaces.UserServiceInterface;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,11 +10,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Objects;
 
-@AllArgsConstructor
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
-    private final UserServiceInterface userServiceInterface;
+
+    @Autowired
+    private UserServiceInterface userServiceInterface;
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable("id") int userId){

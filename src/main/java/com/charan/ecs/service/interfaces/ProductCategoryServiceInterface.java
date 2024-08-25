@@ -16,5 +16,5 @@ public interface ProductCategoryServiceInterface {
 
     boolean deleteProductCategory(int categoryId);
 
-    boolean productCategoryExists(int categoryId);
+    boolean isProductCategoryExists(int categoryId);
 }

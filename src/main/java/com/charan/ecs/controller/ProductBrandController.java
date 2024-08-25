@@ -2,7 +2,7 @@ package com.charan.ecs.controller;
 
 import com.charan.ecs.dto.ProductBrandDto;
 import com.charan.ecs.service.interfaces.ProductBrandServiceInterface;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +12,10 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/productBrand")
-@AllArgsConstructor
 public class ProductBrandController {
-    private final ProductBrandServiceInterface productBrandServiceInterface;
+
+    @Autowired
+    private ProductBrandServiceInterface productBrandServiceInterface;
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductBrandDto> getProductBrandById(@PathVariable("id") int brandId) {

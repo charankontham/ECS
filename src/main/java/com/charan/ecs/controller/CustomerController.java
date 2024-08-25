@@ -1,30 +1,20 @@
 package com.charan.ecs.controller;
 
-import com.charan.ecs.dto.AddressDto;
-import com.charan.ecs.dto.CartFinalDto;
 import com.charan.ecs.dto.CustomerDto;
-import com.charan.ecs.repository.CustomerRepository;
-import com.charan.ecs.service.interfaces.AddressServiceInterface;
-import com.charan.ecs.service.interfaces.CartServiceInterface;
 import com.charan.ecs.service.interfaces.CustomerServiceInterface;
-import com.charan.ecs.service.interfaces.OrderServiceInterface;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Objects;
 
-@AllArgsConstructor
 @RestController
 @RequestMapping("/api/customer")
 public class CustomerController {
 
-    private final CustomerServiceInterface customerServiceInterface;
-    private final CartServiceInterface cartServiceInterface;
-    private final AddressServiceInterface addressServiceInterface;
-//    private final OrderServiceInterface orderServiceInterface;
+    @Autowired
+    private CustomerServiceInterface customerServiceInterface;
 
     @PostMapping
     public ResponseEntity<?> addCustomer(@RequestBody CustomerDto customerDto) {
