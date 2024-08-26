@@ -1,7 +1,7 @@
 package com.charan.ecs.controller;
 
 import com.charan.ecs.dto.ProductBrandDto;
-import com.charan.ecs.service.interfaces.ProductBrandServiceInterface;
+import com.charan.ecs.service.interfaces.IProductBrandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,23 +15,23 @@ import java.util.Objects;
 public class ProductBrandController {
 
     @Autowired
-    private ProductBrandServiceInterface productBrandServiceInterface;
+    private IProductBrandService productBrandService;
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductBrandDto> getProductBrandById(@PathVariable("id") int brandId) {
-        ProductBrandDto productBrandDto = productBrandServiceInterface.getProductBrandById(brandId);
+        ProductBrandDto productBrandDto = productBrandService.getProductBrandById(brandId);
         return ResponseEntity.ok(productBrandDto);
     }
 
     @GetMapping("/")
     public ResponseEntity<List<ProductBrandDto>> getAllProductBrands() {
-        List<ProductBrandDto> productBrands = productBrandServiceInterface.getAllProductBrands();
+        List<ProductBrandDto> productBrands = productBrandService.getAllProductBrands();
         return ResponseEntity.ok(productBrands);
     }
 
     @PostMapping
     public ResponseEntity<?> addProductBrand(@RequestBody ProductBrandDto productBrandDto) {
-        Object response = productBrandServiceInterface.addProductBrand(productBrandDto);
+        Object response = productBrandService.addProductBrand(productBrandDto);
         if(Objects.equals(response, HttpStatus.CONFLICT)){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Product brand already exists!");
         } else if (Objects.equals(response, HttpStatus.BAD_REQUEST)) {
@@ -42,7 +42,7 @@ public class ProductBrandController {
 
     @PutMapping
     public ResponseEntity<?> updateProductBrand(@RequestBody ProductBrandDto productBrandDto) {
-        Object response = productBrandServiceInterface.updateProductBrand(productBrandDto);
+        Object response = productBrandService.updateProductBrand(productBrandDto);
         if(Objects.equals(response, HttpStatus.NOT_FOUND)){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ProductBrand Not Found!");
         }else if (Objects.equals(response, HttpStatus.BAD_REQUEST)) {
@@ -53,7 +53,7 @@ public class ProductBrandController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProductBrand(@PathVariable("id") int brandId) {
-        boolean response = productBrandServiceInterface.deleteProductBrand(brandId);
+        boolean response = productBrandService.deleteProductBrand(brandId);
         if(response){
             return ResponseEntity.status(HttpStatus.OK).body("Product brand Deleted Successfully!");
         }

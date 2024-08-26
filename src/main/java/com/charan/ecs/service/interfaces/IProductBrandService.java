@@ -4,7 +4,7 @@ import com.charan.ecs.dto.ProductBrandDto;
 
 import java.util.List;
 
-public interface ProductBrandServiceInterface {
+public interface IProductBrandService {
 
     ProductBrandDto getProductBrandById(int brandId);
 

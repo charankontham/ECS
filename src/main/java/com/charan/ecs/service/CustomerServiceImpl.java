@@ -5,10 +5,9 @@ import com.charan.ecs.entity.Customer;
 import com.charan.ecs.exception.ResourceNotFoundException;
 import com.charan.ecs.mapper.CustomerMapper;
 import com.charan.ecs.repository.CustomerRepository;
-import com.charan.ecs.service.interfaces.CustomerServiceInterface;
+import com.charan.ecs.service.interfaces.ICustomerService;
 import com.charan.ecs.validations.CustomerValidation;
 import com.google.common.hash.Hashing;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-public class CustomerService implements CustomerServiceInterface {
+public class CustomerServiceImpl implements ICustomerService {
 
     @Autowired
     private CustomerRepository customerRepository;

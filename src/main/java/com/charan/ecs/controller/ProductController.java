@@ -2,7 +2,7 @@ package com.charan.ecs.controller;
 
 import com.charan.ecs.dto.ProductDto;
 import com.charan.ecs.dto.ProductFinalDto;
-import com.charan.ecs.service.interfaces.ProductServiceInterface;
+import com.charan.ecs.service.interfaces.IProductService;
 import com.charan.ecs.util.Constants;
 import com.charan.ecs.util.HelperFunctions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,23 +16,23 @@ import java.util.List;
 public class ProductController {
 
     @Autowired
-    private ProductServiceInterface productServiceInterface;
+    private IProductService productService;
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductFinalDto> getProductById(@PathVariable("id") int productId) {
-        ProductFinalDto productFinalDto = productServiceInterface.getProduct(productId);
+        ProductFinalDto productFinalDto = productService.getProduct(productId);
         return ResponseEntity.ok(productFinalDto);
     }
 
     @GetMapping("/")
     public ResponseEntity<List<ProductFinalDto>> getAllProducts() {
-        List<ProductFinalDto> products = productServiceInterface.getAllProducts();
+        List<ProductFinalDto> products = productService.getAllProducts();
         return ResponseEntity.ok(products);
     }
 
     @PostMapping
     public ResponseEntity<?> addProduct(@RequestBody ProductDto productDto) {
-        Object response = productServiceInterface.addProduct(productDto);
+        Object response = productService.addProduct(productDto);
         if(response instanceof ProductFinalDto) {
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         }
@@ -41,13 +41,13 @@ public class ProductController {
 
     @PutMapping()
     public ResponseEntity<?> updateProduct(@RequestBody ProductFinalDto productFinalDto) {
-        Object response = productServiceInterface.updateProduct(productFinalDto);
+        Object response = productService.updateProduct(productFinalDto);
         return HelperFunctions.getResponseEntity(response);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable("id") int productId) {
-        boolean isDeleted = productServiceInterface.deleteProduct(productId);
+        boolean isDeleted = productService.deleteProduct(productId);
         if(isDeleted) {
             return ResponseEntity.status(HttpStatus.OK).body("Product deleted successfully!");
         }

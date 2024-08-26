@@ -1,7 +1,7 @@
 package com.charan.ecs.controller;
 
 import com.charan.ecs.dto.ProductCategoryDto;
-import com.charan.ecs.service.interfaces.ProductCategoryServiceInterface;
+import com.charan.ecs.service.interfaces.IProductCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,23 +14,23 @@ import java.util.Objects;
 public class ProductCategoryController {
 
     @Autowired
-    private ProductCategoryServiceInterface productCategoryServiceInterface;
+    private IProductCategoryService productCategoryService;
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getProductCategoryById(@PathVariable("id") int categoryId) {
-        ProductCategoryDto productCategoryDto = productCategoryServiceInterface.getProductCategoryById(categoryId);
+        ProductCategoryDto productCategoryDto = productCategoryService.getProductCategoryById(categoryId);
         return ResponseEntity.status(HttpStatus.OK).body(productCategoryDto);
     }
 
     @GetMapping("/")
     public ResponseEntity<?> getAllProductCategory() {
-        List<ProductCategoryDto> productCategories = productCategoryServiceInterface.getAllProductCategories();
+        List<ProductCategoryDto> productCategories = productCategoryService.getAllProductCategories();
         return ResponseEntity.ok(productCategories);
     }
 
     @PostMapping
     public ResponseEntity<?> addProductCategory(@RequestBody ProductCategoryDto productCategoryDto) {
-        ProductCategoryDto newProductCategoryDto = productCategoryServiceInterface.addProductCategory(productCategoryDto);
+        ProductCategoryDto newProductCategoryDto = productCategoryService.addProductCategory(productCategoryDto);
         if(!Objects.nonNull(newProductCategoryDto)) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Incorrect request body!");
         }
@@ -39,7 +39,7 @@ public class ProductCategoryController {
 
     @PutMapping()
     public ResponseEntity<?> updateProductCategory(@RequestBody ProductCategoryDto productCategoryDto) {
-        ProductCategoryDto newProductCategoryDto = productCategoryServiceInterface.updateProductCategory(productCategoryDto);
+        ProductCategoryDto newProductCategoryDto = productCategoryService.updateProductCategory(productCategoryDto);
         if(!Objects.nonNull(newProductCategoryDto)) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("CategoryId not found!");
         }
@@ -48,7 +48,7 @@ public class ProductCategoryController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteProductCategory(@PathVariable("id") int productCategoryId) {
-        boolean isDeleted = productCategoryServiceInterface.deleteProductCategory(productCategoryId);
+        boolean isDeleted = productCategoryService.deleteProductCategory(productCategoryId);
         if(isDeleted) {
             return ResponseEntity.status(HttpStatus.OK).body("Product category deleted successfully!");
         }

@@ -6,35 +6,34 @@ import com.charan.ecs.entity.Order;
 import com.charan.ecs.exception.ResourceNotFoundException;
 import com.charan.ecs.mapper.OrderMapper;
 import com.charan.ecs.repository.OrderRepository;
-import com.charan.ecs.service.interfaces.AddressServiceInterface;
-import com.charan.ecs.service.interfaces.CustomerServiceInterface;
-import com.charan.ecs.service.interfaces.OrderServiceInterface;
+import com.charan.ecs.service.interfaces.IAddressService;
+import com.charan.ecs.service.interfaces.ICustomerService;
+import com.charan.ecs.service.interfaces.IOrderService;
 import com.charan.ecs.util.Constants;
 import com.charan.ecs.util.HelperFunctions;
 import com.charan.ecs.validations.OrderValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-public class OrderService implements OrderServiceInterface {
+public class OrderServiceImpl implements IOrderService {
 
     @Autowired
     private OrderRepository orderRepository;
     @Autowired
-    private CustomerServiceInterface customerServiceInterface;
+    private ICustomerService customerService;
     @Autowired
-    private AddressServiceInterface addressServiceInterface;
+    private IAddressService addressService;
 
     @Override
     public OrderFinalDto getOrderById(int orderId) {
         Order order = orderRepository.findById(orderId).
                 orElseThrow(() -> new ResourceNotFoundException("Order not found!"));
-        return OrderMapper.toOrderFinalDto(order, customerServiceInterface, addressServiceInterface);
+        return OrderMapper.toOrderFinalDto(order, customerService, addressService);
     }
 
     @Override
@@ -44,8 +43,8 @@ public class OrderService implements OrderServiceInterface {
                 map(
                         (order) -> OrderMapper.toOrderFinalDto(
                                 order,
-                                customerServiceInterface,
-                                addressServiceInterface
+                                customerService,
+                                addressService
                         )
                 ).collect(Collectors.toList());
     }
@@ -63,8 +62,8 @@ public class OrderService implements OrderServiceInterface {
                 map(
                         (order) -> OrderMapper.toOrderFinalDto(
                                 order,
-                                customerServiceInterface,
-                                addressServiceInterface
+                                customerService,
+                                addressService
                         )
                 ).collect(Collectors.toList()
                 );
@@ -118,8 +117,8 @@ public class OrderService implements OrderServiceInterface {
                 return OrderMapper.
                         toOrderFinalDto(
                                 savedOrder,
-                                customerServiceInterface,
-                                addressServiceInterface
+                                customerService,
+                                addressService
                         );
             }
         }

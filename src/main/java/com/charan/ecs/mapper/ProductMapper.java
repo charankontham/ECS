@@ -5,8 +5,8 @@ import com.charan.ecs.dto.ProductCategoryDto;
 import com.charan.ecs.dto.ProductDto;
 import com.charan.ecs.dto.ProductFinalDto;
 import com.charan.ecs.entity.Product;
-import com.charan.ecs.service.interfaces.ProductBrandServiceInterface;
-import com.charan.ecs.service.interfaces.ProductCategoryServiceInterface;
+import com.charan.ecs.service.interfaces.IProductBrandService;
+import com.charan.ecs.service.interfaces.IProductCategoryService;
 import com.charan.ecs.util.HelperFunctions;
 
 import java.util.List;
@@ -48,11 +48,11 @@ public class ProductMapper {
 
     public static ProductFinalDto mapToProductFinalDto(
             Product product,
-            ProductCategoryServiceInterface productCategoryServiceInterface,
-            ProductBrandServiceInterface productBrandServiceInterface
+            IProductCategoryService productCategoryService,
+            IProductBrandService productBrandService
     ) {
-        ProductCategoryDto productCategoryDto = productCategoryServiceInterface.getProductCategoryById(product.getProductCategoryId());
-        ProductBrandDto productBrandDto = productBrandServiceInterface.getProductBrandById(product.getProductBrandId());
+        ProductCategoryDto productCategoryDto = productCategoryService.getProductCategoryById(product.getProductCategoryId());
+        ProductBrandDto productBrandDto = productBrandService.getProductBrandById(product.getProductBrandId());
         return new ProductFinalDto(
                 product.getProductId(),
                 product.getProductName(),

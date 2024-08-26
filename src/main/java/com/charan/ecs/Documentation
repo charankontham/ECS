@@ -54,3 +54,5 @@ Remove dependencies for deleteCustomer
 
 2. Update the service and interfaces names with IproductService and ProductServiceImpl
 
+3. Update HelperFunctions method by removing fields
+

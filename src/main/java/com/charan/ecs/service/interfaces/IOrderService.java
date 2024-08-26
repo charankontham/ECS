@@ -4,7 +4,7 @@ import com.charan.ecs.dto.OrderDto;
 import com.charan.ecs.dto.OrderFinalDto;
 import java.util.List;
 
-public interface OrderServiceInterface {
+public interface IOrderService {
 
     OrderFinalDto getOrderById(int orderId);
 

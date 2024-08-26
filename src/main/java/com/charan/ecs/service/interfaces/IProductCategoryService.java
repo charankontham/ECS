@@ -4,7 +4,7 @@ import com.charan.ecs.dto.ProductCategoryDto;
 
 import java.util.List;
 
-public interface ProductCategoryServiceInterface {
+public interface IProductCategoryService {
 
     ProductCategoryDto getProductCategoryById(int categoryId);
 

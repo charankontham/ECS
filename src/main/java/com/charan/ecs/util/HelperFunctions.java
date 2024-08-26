@@ -12,9 +12,9 @@ import java.util.stream.Collectors;
 @Setter
 public class HelperFunctions {
 
-    public static ProductServiceInterface productServiceInterface;
-    private static CustomerServiceInterface customerServiceInterface;
-    private static AddressServiceInterface addressServiceInterface;
+    public static IProductService productService;
+    private static ICustomerService ICustomerService;
+    private static IAddressService IAddressService;
 
     public static boolean checkZeroQuantities(List<Integer> quantities) {
         for (Integer quantity : quantities) {
@@ -49,14 +49,14 @@ public class HelperFunctions {
     public static List<ProductFinalDto> getProductFinalDtoList(
             List<Integer> productIdsList
     ) {
-        return productIdsList.stream().map(productServiceInterface::getProduct).toList();
+        return productIdsList.stream().map(productService::getProduct).toList();
     }
 
     public static Object validateCustomerProductAndProductQuantities(int customerId,
                                                                      List<Integer> productIds,
                                                                      List<Integer> productQuantities) {
         try {
-            boolean customerExists = customerServiceInterface.isCustomerExist(customerId);
+            boolean customerExists = ICustomerService.isCustomerExist(customerId);
             if (!customerExists) {
                 return Constants.CustomerNotFound;
             }
@@ -85,7 +85,7 @@ public class HelperFunctions {
 
     public static Object validateAddress(int addressId, int customerId) {
         try {
-            AddressDto addressDto = addressServiceInterface.getAddressById(addressId);
+            AddressDto addressDto = IAddressService.getAddressById(addressId);
             if (addressDto.getCustomerId() != customerId) {
                 return Constants.AddressNotFound;
             }
@@ -142,42 +142,42 @@ public class HelperFunctions {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    public static void removeCartItemsByProductId(Integer productId, CartServiceInterface cartServiceInterface) {
-        List<CartDto> carts = cartServiceInterface.getCartsByProductId(productId);
+    public static void removeCartItemsByProductId(Integer productId, ICartService ICartService) {
+        List<CartDto> carts = ICartService.getCartsByProductId(productId);
         for (CartDto cartDto : carts) {
             List<Integer> productIds = cartDto.getProductIds();
             List<Integer> productQuantities = cartDto.getProductQuantities();
             if (productIds.size() == 1) {
-                cartServiceInterface.deleteCart(cartDto.getCartId());
+                ICartService.deleteCart(cartDto.getCartId());
             } else {
                 productQuantities.remove(productIds.indexOf(productId));
                 productIds.remove(productId);
                 cartDto.setProductIds(productIds);
                 cartDto.setProductQuantities(productQuantities);
-                cartServiceInterface.updateCart(cartDto);
+                ICartService.updateCart(cartDto);
             }
         }
     }
 
-    public static void removeOrderItemsByProductId(Integer productId, OrderServiceInterface orderServiceInterface) {
-        List<OrderDto> orders = orderServiceInterface.getAllOrdersByProductId(productId);
+    public static void removeOrderItemsByProductId(Integer productId, IOrderService orderService) {
+        List<OrderDto> orders = orderService.getAllOrdersByProductId(productId);
         for (OrderDto orderDto : orders) {
             List<Integer> productIds = orderDto.getProductIds();
             List<Integer> productQuantities = orderDto.getProductQuantities();
             if (productIds.size() == 1) {
-                orderServiceInterface.deleteOrderById(orderDto.getOrderId());
+                orderService.deleteOrderById(orderDto.getOrderId());
             } else {
                 productQuantities.remove(productIds.indexOf(productId));
                 productIds.remove(productId);
                 orderDto.setProductIds(productIds);
                 orderDto.setProductQuantities(productQuantities);
-                orderServiceInterface.updateOrder(orderDto);
+                orderService.updateOrder(orderDto);
             }
         }
     }
 
     public static boolean isProductExists(Integer productId) {
-        return productServiceInterface.isProductExists(productId);
+        return productService.isProductExists(productId);
     }
 
 }

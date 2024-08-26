@@ -5,8 +5,8 @@ import com.charan.ecs.entity.Address;
 import com.charan.ecs.exception.ResourceNotFoundException;
 import com.charan.ecs.mapper.AddressMapper;
 import com.charan.ecs.repository.AddressRepository;
-import com.charan.ecs.service.interfaces.AddressServiceInterface;
-import com.charan.ecs.service.interfaces.CustomerServiceInterface;
+import com.charan.ecs.service.interfaces.ICustomerService;
+import com.charan.ecs.service.interfaces.IAddressService;
 import com.charan.ecs.validations.AddressValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,12 +15,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class AddressService implements AddressServiceInterface {
+public class AddressServiceImpl implements IAddressService {
 
     @Autowired
     private AddressRepository addressRepository;
     @Autowired
-    private CustomerServiceInterface customerServiceInterface;
+    private ICustomerService customerService;
 
     @Override
     public AddressDto getAddressById(int addressId) {
@@ -43,7 +43,7 @@ public class AddressService implements AddressServiceInterface {
 
     @Override
     public Object addAddress(AddressDto addressDto) {
-        boolean customerExists = customerServiceInterface.isCustomerExist(addressDto.getCustomerId());
+        boolean customerExists = customerService.isCustomerExist(addressDto.getCustomerId());
         if(!customerExists) {
             return HttpStatus.NOT_FOUND;
         }
@@ -60,7 +60,7 @@ public class AddressService implements AddressServiceInterface {
 
     @Override
     public Object updateAddress(AddressDto addressDto) {
-        boolean customerExists = customerServiceInterface.isCustomerExist(addressDto.getCustomerId());
+        boolean customerExists = customerService.isCustomerExist(addressDto.getCustomerId());
         if(!customerExists){
             return HttpStatus.NOT_ACCEPTABLE;
         }

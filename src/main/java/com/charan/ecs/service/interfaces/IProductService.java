@@ -5,7 +5,7 @@ import com.charan.ecs.dto.ProductFinalDto;
 
 import java.util.List;
 
-public interface ProductServiceInterface {
+public interface IProductService {
 
     ProductFinalDto getProduct(Integer productId);
 

@@ -16,14 +16,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ProductService implements ProductServiceInterface {
+public class ProductServiceImpl implements IProductService {
 
     @Autowired
     private ProductRepository productRepository;
     @Autowired
-    private ProductCategoryServiceInterface productCategoryServiceInterface;
+    private IProductCategoryService productCategoryService;
     @Autowired
-    private ProductBrandServiceInterface productBrandServiceInterface;
+    private IProductBrandService productBrandService;
     @Autowired
     private RemoveDependencies removeDependencies;
 
@@ -31,7 +31,7 @@ public class ProductService implements ProductServiceInterface {
     public ProductFinalDto getProduct(Integer productId) {
         Product product = productRepository.findById(productId).
                 orElseThrow(() -> new ResourceNotFoundException("Product Not Found!"));
-        return ProductMapper.mapToProductFinalDto(product, productCategoryServiceInterface, productBrandServiceInterface);
+        return ProductMapper.mapToProductFinalDto(product, productCategoryService, productBrandService);
     }
 
     @Override
@@ -40,8 +40,8 @@ public class ProductService implements ProductServiceInterface {
         return products.stream().map((product) -> ProductMapper.
                 mapToProductFinalDto(
                         product,
-                        productCategoryServiceInterface,
-                        productBrandServiceInterface)
+                        productCategoryService,
+                        productBrandService)
                 ).
                 collect(Collectors.toList());
     }
@@ -83,9 +83,9 @@ public class ProductService implements ProductServiceInterface {
         if(!ProductValidation.isProductDtoSchemaValid(productDto)){
             return HttpStatus.BAD_REQUEST;
         }
-        boolean productCategoryExists = productCategoryServiceInterface.
+        boolean productCategoryExists = productCategoryService.
                 isProductCategoryExists(productDto.getProductCategoryId());
-        boolean productBrandExists = productBrandServiceInterface.isProductBrandExists(productDto.getProductBrandId());
+        boolean productBrandExists = productBrandService.isProductBrandExists(productDto.getProductBrandId());
         if(!productBrandExists){
             return Constants.ProductBrandNotFound;
         } else if (!productCategoryExists) {
@@ -93,7 +93,7 @@ public class ProductService implements ProductServiceInterface {
         } else {
             Product product = productRepository.
                     save(ProductMapper.mapToProduct(productDto));
-            return ProductMapper.mapToProductFinalDto(product, productCategoryServiceInterface, productBrandServiceInterface);
+            return ProductMapper.mapToProductFinalDto(product, productCategoryService, productBrandService);
         }
     }
 }

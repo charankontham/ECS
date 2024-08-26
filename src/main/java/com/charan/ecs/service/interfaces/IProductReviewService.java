@@ -4,7 +4,7 @@ import com.charan.ecs.dto.ProductReviewDto;
 
 import java.util.List;
 
-public interface ProductReviewServiceInterface {
+public interface IProductReviewService {
 
     ProductReviewDto getProductReviewById(int reviewId);
 

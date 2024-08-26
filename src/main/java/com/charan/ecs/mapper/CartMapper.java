@@ -3,7 +3,7 @@ package com.charan.ecs.mapper;
 import com.charan.ecs.dto.CartDto;
 import com.charan.ecs.dto.CartFinalDto;
 import com.charan.ecs.entity.Cart;
-import com.charan.ecs.service.interfaces.CustomerServiceInterface;
+import com.charan.ecs.service.interfaces.ICustomerService;
 import com.charan.ecs.util.HelperFunctions;
 
 public class CartMapper {
@@ -28,10 +28,10 @@ public class CartMapper {
     }
 
     public static CartFinalDto mapToCartFinalDto(Cart cart,
-                                                 CustomerServiceInterface customerServiceInterface) {
+                                                 ICustomerService ICustomerService) {
         return new CartFinalDto(
                 cart.getCartId(),
-                customerServiceInterface.getCustomerById(cart.getCustomerId()),
+                ICustomerService.getCustomerById(cart.getCustomerId()),
                 ProductMapper.mapProductQuantitiesWithProductFinalDtoList(
                         cart.getProductIds(),
                         cart.getQuantities())

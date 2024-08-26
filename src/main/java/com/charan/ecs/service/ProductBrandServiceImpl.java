@@ -5,7 +5,7 @@ import com.charan.ecs.entity.ProductBrand;
 import com.charan.ecs.exception.ResourceNotFoundException;
 import com.charan.ecs.mapper.ProductBrandMapper;
 import com.charan.ecs.repository.ProductBrandRepository;
-import com.charan.ecs.service.interfaces.ProductBrandServiceInterface;
+import com.charan.ecs.service.interfaces.IProductBrandService;
 import com.charan.ecs.validations.BasicValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ProductBrandService implements ProductBrandServiceInterface {
+public class ProductBrandServiceImpl implements IProductBrandService {
 
     @Autowired
     private ProductBrandRepository productBrandRepository;

@@ -1,7 +1,7 @@
 package com.charan.ecs.controller;
 
 import com.charan.ecs.dto.CartDto;
-import com.charan.ecs.service.interfaces.CartServiceInterface;
+import com.charan.ecs.service.interfaces.ICartService;
 import com.charan.ecs.util.Constants;
 import com.charan.ecs.util.HelperFunctions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,21 +16,21 @@ import java.util.Objects;
 public class CartController {
 
     @Autowired
-    private CartServiceInterface cartServiceInterface;
+    private ICartService ICartService;
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getCart(@PathVariable("id") int cartId) {
-        return ResponseEntity.ok(cartServiceInterface.getCart(cartId));
+        return ResponseEntity.ok(ICartService.getCart(cartId));
     }
 
     @GetMapping("/getCartByCustomerId/{id}")
     public ResponseEntity<?> getCartByCustomerId(@PathVariable("id") int customerId) {
-        return ResponseEntity.ok(cartServiceInterface.getCartByCustomerId(customerId));
+        return ResponseEntity.ok(ICartService.getCartByCustomerId(customerId));
     }
 
     @PostMapping
     public ResponseEntity<?> addCart(@RequestBody CartDto cartDto) {
-        Object response = cartServiceInterface.addCart(cartDto);
+        Object response = ICartService.addCart(cartDto);
         if (Objects.equals(response, HttpStatus.CONFLICT)) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Cart already exists with Id : " + cartDto.getCartId());
         }
@@ -43,7 +43,7 @@ public class CartController {
 
     @PutMapping
     public ResponseEntity<?> updateCart(@RequestBody CartDto cartDto) {
-        Object response = cartServiceInterface.updateCart(cartDto);
+        Object response = ICartService.updateCart(cartDto);
         if(Objects.equals(response, Constants.CartNotFound)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cart not found!");
         }
@@ -52,7 +52,7 @@ public class CartController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCart(@PathVariable("id") int cartId) {
-        boolean response = cartServiceInterface.deleteCart(cartId);
+        boolean response = ICartService.deleteCart(cartId);
         if(response){
             return ResponseEntity.status(HttpStatus.OK).body("Cart successfully deleted!");
         }else{

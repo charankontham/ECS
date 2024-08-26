@@ -6,40 +6,39 @@ import com.charan.ecs.entity.Cart;
 import com.charan.ecs.exception.ResourceNotFoundException;
 import com.charan.ecs.mapper.CartMapper;
 import com.charan.ecs.repository.CartRepository;
-import com.charan.ecs.service.interfaces.CartServiceInterface;
-import com.charan.ecs.service.interfaces.CustomerServiceInterface;
+import com.charan.ecs.service.interfaces.ICustomerService;
+import com.charan.ecs.service.interfaces.ICartService;
 import com.charan.ecs.util.Constants;
 import com.charan.ecs.util.HelperFunctions;
 import com.charan.ecs.validations.CartValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-public class CartService implements CartServiceInterface {
+public class CartServiceImpl implements ICartService {
 
     @Autowired
     private CartRepository cartRepository;
 
     @Autowired
-    private CustomerServiceInterface customerServiceInterface;
+    private ICustomerService customerService;
 
     @Override
     public CartFinalDto getCart(int cartId) {
         Cart cart = cartRepository.findById(cartId).
                 orElseThrow(() -> new ResourceNotFoundException("Cart not found!"));
-        return CartMapper.mapToCartFinalDto(cart, customerServiceInterface);
+        return CartMapper.mapToCartFinalDto(cart, customerService);
     }
 
     @Override
     public CartFinalDto getCartByCustomerId(int customerId) {
         Cart cart = cartRepository.findByCustomerId(customerId).
                 orElseThrow(() -> new ResourceNotFoundException("Cart not found!"));
-        return CartMapper.mapToCartFinalDto(cart, customerServiceInterface);
+        return CartMapper.mapToCartFinalDto(cart, customerService);
     }
 
     @Override

@@ -3,8 +3,8 @@ package com.charan.ecs.mapper;
 import com.charan.ecs.dto.OrderDto;
 import com.charan.ecs.dto.OrderFinalDto;
 import com.charan.ecs.entity.Order;
-import com.charan.ecs.service.interfaces.AddressServiceInterface;
-import com.charan.ecs.service.interfaces.CustomerServiceInterface;
+import com.charan.ecs.service.interfaces.IAddressService;
+import com.charan.ecs.service.interfaces.ICustomerService;
 import com.charan.ecs.util.HelperFunctions;
 
 public class OrderMapper {
@@ -40,13 +40,13 @@ public class OrderMapper {
     }
 
     public static OrderFinalDto toOrderFinalDto(Order order,
-                                                CustomerServiceInterface customerServiceInterface,
-                                                AddressServiceInterface addressServiceInterface)
+                                                ICustomerService ICustomerService,
+                                                IAddressService IAddressService)
     {
         return new OrderFinalDto(
                 order.getOrderId(),
-                customerServiceInterface.getCustomerById(order.getCustomerId()),
-                addressServiceInterface.getAddressById(order.getAddressId()),
+                ICustomerService.getCustomerById(order.getCustomerId()),
+                IAddressService.getAddressById(order.getAddressId()),
                 ProductMapper.mapProductQuantitiesWithProductFinalDtoList(
                         order.getProductIds(),
                         order.getProductQuantities()),

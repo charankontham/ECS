@@ -2,7 +2,7 @@ package com.charan.ecs.service.interfaces;
 
 import com.charan.ecs.dto.UserDto;
 
-public interface UserServiceInterface {
+public interface IUserService {
 
     UserDto getUserById(int userId);
 

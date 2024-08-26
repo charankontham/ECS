@@ -1,7 +1,7 @@
 package com.charan.ecs.controller;
 
 import com.charan.ecs.dto.UserDto;
-import com.charan.ecs.service.interfaces.UserServiceInterface;
+import com.charan.ecs.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,23 +15,23 @@ import java.util.Objects;
 public class UserController {
 
     @Autowired
-    private UserServiceInterface userServiceInterface;
+    private IUserService userService;
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable("id") int userId){
-        UserDto userDto = userServiceInterface.getUserById(userId);
+        UserDto userDto = userService.getUserById(userId);
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
     @GetMapping("/getByUsername/{username}")
     public ResponseEntity<?> getUserById(@PathVariable("username") String username){
-        UserDto userDto = userServiceInterface.getUserByUsername(username);
+        UserDto userDto = userService.getUserByUsername(username);
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<?> addUser(@Valid @RequestBody UserDto userDto) {
-        UserDto newUserDto = userServiceInterface.addUser(userDto);
+        UserDto newUserDto = userService.addUser(userDto);
         if(Objects.nonNull(newUserDto)){
             return ResponseEntity.status(HttpStatus.CREATED).body(newUserDto);
         }
@@ -40,7 +40,7 @@ public class UserController {
 
     @PutMapping
     public ResponseEntity<?> updateUser(@RequestBody UserDto userDto) {
-        UserDto newUserDto = userServiceInterface.updateUser(userDto);
+        UserDto newUserDto = userService.updateUser(userDto);
         if(Objects.nonNull(newUserDto)){
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(newUserDto);
         }
@@ -49,7 +49,7 @@ public class UserController {
 
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteUser(@PathVariable("id") int userId) {
-        boolean isDeleted = userServiceInterface.deleteUserById(userId);
+        boolean isDeleted = userService.deleteUserById(userId);
         if(isDeleted){
             return ResponseEntity.status(HttpStatus.OK).body("User Deleted Successfully!");
         }

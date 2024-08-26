@@ -5,7 +5,7 @@ import com.charan.ecs.dto.CartFinalDto;
 
 import java.util.List;
 
-public interface CartServiceInterface {
+public interface ICartService {
 
     CartFinalDto getCart(int cartId);
 

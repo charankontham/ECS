@@ -5,7 +5,7 @@ import com.charan.ecs.entity.User;
 import com.charan.ecs.exception.ResourceNotFoundException;
 import com.charan.ecs.mapper.UserMapper;
 import com.charan.ecs.repository.UserRepository;
-import com.charan.ecs.service.interfaces.UserServiceInterface;
+import com.charan.ecs.service.interfaces.IUserService;
 import com.charan.ecs.validations.UserValidation;
 import com.google.common.hash.Hashing;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.nio.charset.StandardCharsets;
 
 @Service
-public class UserService implements UserServiceInterface {
+public class UserServiceImpl implements IUserService {
 
     @Autowired
     private UserRepository userRepository;

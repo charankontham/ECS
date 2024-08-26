@@ -4,7 +4,7 @@ import com.charan.ecs.dto.AddressDto;
 
 import java.util.List;
 
-public interface AddressServiceInterface {
+public interface IAddressService {
 
     AddressDto getAddressById(int addressId);
 

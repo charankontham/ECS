@@ -5,9 +5,9 @@ import com.charan.ecs.entity.ProductReview;
 import com.charan.ecs.exception.ResourceNotFoundException;
 import com.charan.ecs.mapper.ProductReviewMapper;
 import com.charan.ecs.repository.ProductReviewRepository;
-import com.charan.ecs.service.interfaces.CustomerServiceInterface;
-import com.charan.ecs.service.interfaces.OrderServiceInterface;
-import com.charan.ecs.service.interfaces.ProductReviewServiceInterface;
+import com.charan.ecs.service.interfaces.ICustomerService;
+import com.charan.ecs.service.interfaces.IOrderService;
+import com.charan.ecs.service.interfaces.IProductReviewService;
 import com.charan.ecs.util.Constants;
 import com.charan.ecs.util.HelperFunctions;
 import com.charan.ecs.validations.ProductReviewValidation;
@@ -21,14 +21,14 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class ProductReviewService implements ProductReviewServiceInterface {
+public class ProductReviewServiceImpl implements IProductReviewService {
 
     @Autowired
     private ProductReviewRepository productReviewRepository;
     @Autowired
-    private CustomerServiceInterface customerServiceInterface;
+    private ICustomerService customerService;
     @Autowired
-    private OrderServiceInterface orderServiceInterface;
+    private IOrderService orderService;
 
     @Override
     public ProductReviewDto getProductReviewById(int reviewId) {
@@ -121,11 +121,11 @@ public class ProductReviewService implements ProductReviewServiceInterface {
     }
 
     private Object validateAndSaveProductReview(ProductReviewDto productReviewDto) throws DataIntegrityViolationException {
-        boolean customerExists = customerServiceInterface.isCustomerExist(productReviewDto.getCustomerId());
+        boolean customerExists = customerService.isCustomerExist(productReviewDto.getCustomerId());
         boolean productExists = HelperFunctions.isProductExists(productReviewDto.getProductId());
         boolean orderExists = HelperFunctions.isOrderExistsByProductId(
                 productReviewDto.getProductId(),
-                orderServiceInterface.getAllOrdersByCustomerId(productReviewDto.getCustomerId())
+                orderService.getAllOrdersByCustomerId(productReviewDto.getCustomerId())
         );
         if (!ProductReviewValidation.validateProductReview(productReviewDto)) {
             return HttpStatus.BAD_REQUEST;

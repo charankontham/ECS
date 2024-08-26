@@ -1,7 +1,7 @@
 package com.charan.ecs.controller;
 
 import com.charan.ecs.dto.AddressDto;
-import com.charan.ecs.service.interfaces.AddressServiceInterface;
+import com.charan.ecs.service.interfaces.IAddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,22 +13,22 @@ import java.util.Objects;
 @RequestMapping("/api/address")
 public class AddressController {
     @Autowired
-    private AddressServiceInterface addressServiceInterface;
+    private IAddressService IAddressService;
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getAddressById(@PathVariable("id") int addressId){
-        AddressDto addressDto = addressServiceInterface.getAddressById(addressId);
+        AddressDto addressDto = IAddressService.getAddressById(addressId);
         return ResponseEntity.ok(addressDto);
     }
 
     @GetMapping("/")
     public ResponseEntity<List<AddressDto>> getAllAddresses(){
-        return ResponseEntity.ok(addressServiceInterface.getAllAddresses());
+        return ResponseEntity.ok(IAddressService.getAllAddresses());
     }
 
     @PostMapping
     public ResponseEntity<?> addAddress(@RequestBody AddressDto addressDto){
-        Object response = addressServiceInterface.addAddress(addressDto);
+        Object response = IAddressService.addAddress(addressDto);
         if(response == HttpStatus.CONFLICT){
             return new ResponseEntity<>("Address already exists with ID: "+addressDto.getAddressId(), HttpStatus.CONFLICT);
         }
@@ -43,7 +43,7 @@ public class AddressController {
 
     @PutMapping
     public ResponseEntity<?> updateAddress(@RequestBody AddressDto addressDto){
-        Object response = addressServiceInterface.updateAddress(addressDto);
+        Object response = IAddressService.updateAddress(addressDto);
         if(response == HttpStatus.NOT_FOUND){
             return new ResponseEntity<>("Address Not Found!", HttpStatus.NOT_FOUND);
         }else if (response == HttpStatus.NOT_ACCEPTABLE){
@@ -57,7 +57,7 @@ public class AddressController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteAddressById(@PathVariable("id") int addressId){
-        boolean isDeleted = addressServiceInterface.deleteAddressById(addressId);
+        boolean isDeleted = IAddressService.deleteAddressById(addressId);
         if(isDeleted){
             return new ResponseEntity<>("Deleted Successfully", HttpStatus.OK);
         }

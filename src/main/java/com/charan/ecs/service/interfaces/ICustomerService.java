@@ -4,7 +4,7 @@ import com.charan.ecs.dto.CustomerDto;
 
 import java.util.List;
 
-public interface CustomerServiceInterface {
+public interface ICustomerService {
 
     CustomerDto createCustomer(CustomerDto customerDto);
 

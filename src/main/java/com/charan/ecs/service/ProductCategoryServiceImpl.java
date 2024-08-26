@@ -5,7 +5,7 @@ import com.charan.ecs.entity.ProductCategory;
 import com.charan.ecs.exception.ResourceNotFoundException;
 import com.charan.ecs.mapper.ProductCategoryMapper;
 import com.charan.ecs.repository.ProductCategoryRepository;
-import com.charan.ecs.service.interfaces.ProductCategoryServiceInterface;
+import com.charan.ecs.service.interfaces.IProductCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-public class ProductCategoryService implements ProductCategoryServiceInterface {
+public class ProductCategoryServiceImpl implements IProductCategoryService {
 
     @Autowired
     private ProductCategoryRepository productCategoryRepository;
